@@ -95,6 +95,30 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 		weapons_DvStrAddress += 0x3b; // offset from faith dv address to arcane dv address
 		Replace(weapons_DvStrAddress, weapons_DvOgBytes, weapons_DvNewBytes);
 	}
+
+	//////////////////////////////////////// Weapons correction
+
+	std::vector<uint16_t> strengthCorrection = { 0x74,MASKED,0x0f,0xb6,0x98,MASKED,MASKED,MASKED,MASKED,0xeb,MASKED,0x33,0xdb,0x0f,0x28,0xca,0x48,0x8b,0xca,0xe8,MASKED,MASKED,MASKED,MASKED,0x0f,0xb6,0x84,0x24 };
+
+	uintptr_t strengthCorrectionAddress = SigScan(strengthCorrection);
+	if (strengthCorrectionAddress != 0)
+	{
+		Replace(strengthCorrectionAddress, {0x74}, {0xeb}); //strenght patch
+		Sleep(200);
+		strengthCorrectionAddress -= 0x90;
+		Replace(strengthCorrectionAddress, { 0x74 }, { 0xeb }); //intelligence patch
+		Sleep(200);
+		strengthCorrectionAddress -= 0x90;
+		Replace(strengthCorrectionAddress, { 0x74 }, { 0xeb }); //arcane patch
+		Sleep(200);
+		strengthCorrectionAddress -= 0x90;
+		Replace(strengthCorrectionAddress, { 0x74 }, { 0xeb }); //faith patch
+		Sleep(200);
+		strengthCorrectionAddress -= 0x90;
+		Replace(strengthCorrectionAddress, { 0x74 }, { 0xeb }); //dexterity patch
+		Sleep(200);
+		strengthCorrectionAddress -= 0x90;	
+	}
 	CloseLog();
 	return 0;
 }
